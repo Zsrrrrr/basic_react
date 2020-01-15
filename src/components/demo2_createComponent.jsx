@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 // 定义组件：
 /*
-    方式一：工厂函数组件（简单组件）
+    方式一：工厂函数组件（简单组件：没有状态）
 */
 
 // function MyComponent(){

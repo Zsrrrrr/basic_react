@@ -6,13 +6,31 @@ import * as serviceWorker from './serviceWorker';
 
 // **********************************
 import ul from './components/demo1.jsx'
-import Mycomponent from './components/demo2'
+import Mycomponent from './components/demo5_ref'
+
+// **********************************
 
 
 
+const info = {
+    name:'zsr',
+    age:23,
+    sex:'male'
+}
+
+
+/**
+ * 扩展运算符...作用：
+ * 1. 打包
+ *  function fn(...as) {} fn(1,2,3)
+ * 2. 解包
+ *  const arr1 = [1,2,3]
+ *  const arr2 = [6,...arr1,9]
+ */
 
 // ReactDOM.render(<App />, document.getElementById('root'));
-ReactDOM.render(<Mycomponent />,document.getElementById('root'));
+ReactDOM.render(<Mycomponent name={info.name} age={info.age} sex={info.sex}/>,document.getElementById('root'));
+
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
