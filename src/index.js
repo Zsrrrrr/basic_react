@@ -8,6 +8,7 @@ import * as serviceWorker from './serviceWorker';
 import ul from './components/demo1.jsx'
 import Mycomponent from './components/demo5_ref'
 import TestApp from './components/demo6_combo/demo6_combo'
+import LoginForm from './components/demo7_form'
 // **********************************
 
 
@@ -29,7 +30,7 @@ const info = {
  */
 
 // ReactDOM.render(<App />, document.getElementById('root'));
-ReactDOM.render(<TestApp />,document.getElementById('root'));
+ReactDOM.render(<LoginForm />,document.getElementById('root'));
 
 
 // If you want your app to work offline and load faster, you can change
