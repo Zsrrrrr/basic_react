@@ -5,10 +5,8 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 // **********************************
-import ul from './components/demo1.jsx'
-import Mycomponent from './components/demo5_ref'
-import TestApp from './components/demo6_combo/demo6_combo'
-import LoginForm from './components/demo7_form'
+import Life from './components/demo8_life';
+import DOMdiff from './components/demo9_DOMdiff';
 // **********************************
 
 
@@ -30,8 +28,8 @@ const info = {
  */
 
 // ReactDOM.render(<App />, document.getElementById('root'));
-ReactDOM.render(<LoginForm />,document.getElementById('root'));
-
+// ReactDOM.render(<Life msg="React 太难了"/>,document.getElementById('root'));
+ReactDOM.render(<DOMdiff />,document.getElementById('root'))
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
