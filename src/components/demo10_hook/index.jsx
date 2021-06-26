@@ -1,90 +1,85 @@
-import { Button, Progress } from 'antd'
-import React, { Component, useState, useEffect, useRef } from 'react'
+import React, { useEffect, useState } from 'react';
+import { Button } from 'antd';
+import { render } from 'react-dom';
 
-// const HookTest = (props) => {
-//   console.log("重新渲染了页面")
+// useState
+let _state = [];
+let indexOfUseState = 0;  // useState计数
 
-//   const [num, setNum] = useState(0);
-  
-  
-//   // useEffect(() => {
-//   //   let timeInt = setInterval(() => {
-//   //     if(num === 100) clearInterval(timeInt)
-//   //     setNum(num + 1);
-//   //   }, 2000);
-//   // }, [num])
+// useEffect
+let _lastDepsBoxs = []; // 记录依赖，通过依赖来判断触发哪次useEffect
+let _lastClearCallback = [];
+let indexOfUseEffect = 0; // useEffect计数
 
-
-//     let timeInt = setInterval(() => {
-//       console.log("new interval")
-//       // if(num === 100) clearInterval(timeInt)
-//       // setNum(num + 1);
-//     }, 2000);
-
-  
-
-//   const handleClick = () => {
-//     setNum(num + 1)
-//   }
-
-//   return (
-//     <div>
-      // <Button onClick={handleClick} >+</Button>
-      // {num}
-      // <Progress
-      //   strokeColor={{
-      //     '0%': '#108ee9',
-      //     '100%': '#87d068',
-      //   }}
-      //   percent={num}
-      //   showInfo={false}
-      //   status='active'
-      //   style={{ width: '104vw', margin: 20 }}
-      // />
-//     </div>
-//   )
-// }
-
-class HookTest extends React.Component {
-  constructor(){
-    super()
-    this.state = {
-      num: 0,
-    }
+/**
+ * 手写useState
+ * @param {any} init 初始化状态值
+ * @returns [state, setState]
+ */
+function myUseState(init) {
+  _state[indexOfUseState] = _state[indexOfUseState] || init;
+  const _index = indexOfUseState;
+  function dispatch(newState) {
+    _state[_index] = newState;
+    indexOfUseState = 0;
+    indexOfUseEffect = 0;
+    render(<HookTest />, document.getElementById('root'))
   }
-
-  componentDidMount() {
-    this.timer = setInterval(() => {
-      console.log(this.state.num)
-      if (this.state.num === 100) clearInterval(this.timer)
-      this.setState({
-        num: this.state.num + 1,
-      })
-    }, 50);
-  }
-
-  render () {
-    return (
-      <div>
-        {this.state.num}
-      <Progress
-        strokeColor={{
-          '0%': '#108ee9',
-          '100%': '#87d068',
-        }}
-        percent={this.state.num}
-        showInfo={false}
-        status='active'
-        style={{ width: '104vw', margin: 20 }}
-      />
-      </div>
-    )
-  }
+  return [_state[indexOfUseState++], dispatch]
 }
 
+/**
+ * 手写useEffect
+ * @param {function} callback 副作用执行函数
+ * @param {Array} deps 副作用执行的依赖
+ */
+function myUseEffect(callback, deps) {
+  const lastDeps = _lastDepsBoxs[indexOfUseEffect];
+  const changed = 
+    !lastDeps // first render
+    || !deps  // the second parameters were passed
+    || deps.some((dep, idx) => dep !== lastDeps[idx])  // dependent parameters changed
+  if (changed) {
+    _lastDepsBoxs[indexOfUseEffect] = deps;
+    if (_lastClearCallback[indexOfUseEffect]) {
+      _lastClearCallback[indexOfUseEffect]();
+    }
+    _lastClearCallback[indexOfUseEffect] = callback();
+  }
+  indexOfUseEffect++;
+}
 
+export default function HookTest() {
 
+  console.log('start');
 
-export default HookTest
+  // const [count, setCount] = useState(0);
+  const [count, setCount] = myUseState(0)
+  const [str, setStr] = myUseState('e');
+  const [boo, setBoo] = myUseState(false);
 
+  myUseEffect(() => {
+    console.log('useEffect 1');
+    return () => {
+      console.log('clear useEffect 1')
+    }
+  }, [count, str])
 
+  myUseEffect(() => {
+    console.log('useEffect 2');
+    return () => {
+      console.log('clear useEffect 2')
+    }
+  }, [count])
+
+  return (
+    <div>
+      { count }
+      <Button onClick={() => setCount(count + 1)}> + </Button>
+      { str }
+      <Button onClick={() => setStr(str + 'e')}> + </Button>
+      { boo.toString() }
+      <Button onClick={() => setBoo(!boo)}> + </Button>
+    </div>
+  )
+}
